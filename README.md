@@ -75,7 +75,7 @@ float x = 3.9993232393;
 printf("%2.f", x); // prints 3.99
 ```
 
-@todo find table of format specifiers
+@todo find table of format specifiers (tutorialspoint should have one)
 
 ## Variables
 • Variables are basically the opposite of constants, they are the type of data that needs to change where as constants never need to change
@@ -172,13 +172,33 @@ For example you could use a single integer variable to store several characteris
 • use two other bits to specify whether the person can speak French or German 
 • another bit to record whether the person’s salary is $50,000 or more
 In just 4 bits you have a substantial set of data recorded
+[Bitwise Operators in C](https://www.tutorialspoint.com/cprogramming/c_bitwise_operators.htm)
+@todo Anki results of binary operation
 
 ### More about Binary Numbers
 • each position for a binary value has a value
 • for each digit, multiply the digit by its position value
 • add up all of the products to get the final result
 • in general the “position values” in binary values are the powers of two
+• 1 byte equals 8 bits
 
+[RTL && LTR conversion by hand - pseudocode](https://www.typescriptlang.org/play?#code/PTAEGMHsDsDcFMBOAXAltA5qARughogJ6jQCuAttkgM47EAWe0AJgLABQHwAVKBxwDFIiUACUAKgBl+7eHnD1QAB0jVUaGKABmw0Hhz4ioRrX2w8AG1LwZ8LB1CPQARmrJlq9ak0BeUACYAPQAGUD9nByd-Fg81DWgwgMDnRP9IxwBmRGZYr18k-0SAFnTQIpRFFTjvBL8gjMSADlKAVmRKz3jUwKLE5wA2UvhkcAA6cZkdETkFUGZUDHVQclILNCULYnb4OYWl7GJ1Wiq8hPMrG3Y8ZhzSJVBt0HhoNEQdpURIACt4cHdkSCgDDDB70HZafAWUBvairZCjGTcMAyECgACCFgwwnU9HIpjeoFhSiq8ByAJw72o8FIzEBUGY4N0UDgSDQmFBO1w0AIxDIlBodGMTDY7FRAGEYAgUOgsBJpJwFcy3AZuUQAMrIER+ADkwWczj1wT12oA3Bwle55otkLQ-FyeRrEKNqBt1AAKbXagCUo3IeCUbvgUJ8AD5lAQqQBJF6Bixer1m9hKyAWeCjCyQDBuq1HBMosCavBSqnaT7kaELej-QGprTuc0wZVymFwxI5m3OiyocDwN3BH1vYu9gek0g9t1u+TgAA0BmQAH1ztZZ7gFyd4l6wmGAISrxeWaygAD8enA4FAAC5T+eANQBbjcPfrmqz-sN6DUFNpjNZ7XN+Cwms2qzv+gHIF6KK8BwUygJI4iiHwCoAO47F8pDKisayoBsWxgqAS47G6jwQogyqrqAqC0I86BeJY+EHvAm4HA8SGAsKeg3Byc6zhw2wJOQkAIA8gKPNA8AAB7uOR7G0lx1B4OQOxIWCBKPARFFUXhHzwLA3jodCAGtki77KnBogtmsbZ7B2bzMGOvaTmeK7qPuFybqG16gLwhR3nuBGvhBSaNl+6aZh6ZkWcgwGwfBkWBRwQA)
+
+### What is the size of integers in C
+
+There are no guarantees that an ‘int’ will be 32 bits, if you want to use variables of a specific size, particularly when writing code that involves bit manipulations, you should use the ‘Standard Integer Types’ mandated by the c99 specification.
+```c
+int8_t
+uint8_t
+int32_t
+uint32_t
+```
+Small embedded systems may use 16 bit integers. 
+64bit compilers may use 64bits for ints or may use 32bits for an int.
+In general 32-bit integers are objects that can hold numbers between negative 2 billion (-2^31) and positive 2 billion (2^31)  (Signed)
+or between 0 and 4 billion (2^32) (Unsigned).
+An Int in c is by default signed (supports negative and positive values).
+Also check how C picks default type for constant numbers: [c - Is the integer constant’s default type signed or unsigned? - Stack Overflow](https://stackoverflow.com/a/11310578)
 
 ## Expressions and Statements
 For the most part: statements end in semicolons (where as expressions don’t). And expressions return values (statements don’t necessarily).
@@ -222,3 +242,52 @@ while (index < 10)
 } // compound statement ends
 ```
 a block of code === multiple statements === compound statement
+
+# Type Conversions and Cast Operator
+Truncated - data become less precise
+Promoted - data become more precise
+
+Casting is possible but a good practise is to not abuse this and try not to mix types
+
+• Whenever a floating number gets assigned to an integer in C, the decimal portion of the number gets truncated
+```c
+int x = 0;
+float f = 12.125;
+x = f; // value stored === 12 (only the int portion)
+```
+• When performing arithmetic:
+	• If you have two operands in an expression and they’re both integers, then any decimal portion resulting from a division operation is discarded.
+```c
+	  int a = 20;
+    int b = 12;
+    
+    float c = a / b;
+    printf("%f", c); // c === 1.000000
+```
+	• If one operator is an int and the other is a float, then the operation is going to be formed as a floating point operation.
+
+The cast operator has a higher precedence than all arithmetic operators except the unary minus and unary plus 
+
+# Sizeof operator
+The sizeof operator is telling you how many bytes are occupied in memory.
+Its an operator (not a function) and its evaluated at compile-time (not run-time) unless a variable-length array is used in its argument.
+
+*depending on the system you are running different data types are going to be represented in memory with different sizes.
+
+Use as much as you can the sizeof operator to avoid hardcoding sizes in your program.
+
+# Other operators
+• the asterisk `*` is an operator that represents a pointer to a variable. (Its dereferencing a pointer)
+
+# Operator Precedence
+When operators have the same precedence then we look at associativity to determine what is executed first. 
+See: [Operator Precedence and Associativity in C](https://www.tutorialspoint.com/operator-precedence-and-associativity-in-c)
+
+# VLAs (variable length arrays)
+Variable length arrays as a title is a bit misleading, it doesn’t mean that you can change the size of the array directly. What it basically allows you to do, is that now you can use a variable to initialise an array (a feature that got added later to C and wasn’t there initially)
+```c
+int m = 32;
+// basically now you can do this
+float arr[m];
+```
+This feature was introduced to make C a better language for numerical computing. 
